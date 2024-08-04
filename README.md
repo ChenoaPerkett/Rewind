@@ -1,4 +1,4 @@
-# Rewind
+# <img src="images/logo.png" alt="Rewind Logo" width="30"/> Rewind
 
 Welcome to **Rewind** - the ultimate platform to create, share, and explore playlists. Rewind lets you rewind time and revisit your favorite tunes, blending the essence of musical nostalgia with modern sharing capabilities.
 
