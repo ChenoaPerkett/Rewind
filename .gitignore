@@ -1,1 +1,7 @@
+# Files
+.env
+
+# Directories
 node_modules
+backend/dist
+frontend/public/bundle.js
