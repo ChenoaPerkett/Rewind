@@ -21,8 +21,8 @@ export default {
                 },
             },
             {
-                test: /\.css$/, 
-                use: ['style-loader', 'css-loader', 'postcss-loader'], 
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader', 'postcss-loader'],
             },
             {
                 test: /\.(png|jpe?g|gif|svg)$/i,
@@ -30,9 +30,9 @@ export default {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: '[path][name].[ext]', 
-                            outputPath: 'assets/images', 
-                            publicPath: '/public/assets/images', 
+                            name: '[path][name].[ext]',
+                            outputPath: 'assets/images',
+                            publicPath: '/public/assets/images',
                         },
                     },
                 ],
@@ -40,6 +40,10 @@ export default {
         ],
     },
     resolve: {
-        extensions: ['.js', '.jsx'], 
+        extensions: ['.js', '.jsx'],
+    },
+    devServer: {
+        static: path.join('frontend/public'),
+        hot: true,
     },
 };

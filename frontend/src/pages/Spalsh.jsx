@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 
 class Spalsh extends Component {
@@ -14,8 +15,13 @@ class Spalsh extends Component {
           <p className="mt-4 text-2xl text-center max-w-lg">Your personal music hub, where you can relive memories through the power of music.</p>
 
           <div className='flex my-4'>
-            <button className="p-2 mr-4 bg-blue-300 font-bold text-blue-900 rounded-2xl">Get Started</button>
-            <button className="p-2 bg-white font-bold text-blue-900 rounded-2xl">Login</button>
+            <Link to='/register'>
+              <button className="p-2 mr-4 bg-blue-300 font-bold text-blue-900 rounded-2xl">Get Started</button>
+            </Link>
+
+            <Link to='/login'>
+              <button className="p-2 bg-white font-bold text-blue-900 rounded-2xl">Login</button>
+            </Link>
           </div>
 
           <p className="text-xl">Your Playlist, Your Memories</p>
