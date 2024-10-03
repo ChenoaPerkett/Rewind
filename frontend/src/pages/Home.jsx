@@ -25,7 +25,7 @@ class Home extends Component {
           <div className="grid grid-cols-5 gap-4 text-sm font-bold p-4 border-b">
             <span>Name of Song</span>
             <span>Artist</span>
-            <span>Time</span>
+            <span>Date</span>
             <span>Album</span>
             <span>Action</span>
             
@@ -38,7 +38,7 @@ class Home extends Component {
                 <div className="bg-gray-300 h-10 w-10 mr-4"></div>
                 <div>
                   <p className="font-bold">Song Name</p>
-                  <p className="text-sm">by User | 16:45</p>
+                  <p className="text-sm">by User </p>
                 </div>
               </div>
               <span>Artist Name</span>
