@@ -17,7 +17,7 @@ class Sidebar extends React.Component {
                 <nav className="space-y-4  text-white">
 
                     <Link href="/home" className="block text-lg font-semibold p-1 rounded hover:bg-blue-600">
-                        <HomeIcon />  Home
+                        <HomeIcon />Home
                     </Link>
 
                     <Link href="/search" className="block text-lg font-semibold p-1 rounded hover:bg-blue-600">
