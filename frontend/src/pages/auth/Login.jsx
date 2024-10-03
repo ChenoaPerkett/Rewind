@@ -6,12 +6,10 @@ class Login extends React.Component {
     render() {
         return (
             <main className="flex w-full h-screen">
-
                 <div className="w-1/2 h-full">
                     <Welcome />
                 </div>
 
-                
                 <section className="w-1/2 h-full p-8 flex flex-col items-center justify-center bg-blue-50">
                     <div className='flex items-center mb-8'>
                         <img className="mr-4 h-16 w-16" src="/assets/images/logo.png" alt="rewind logo" />
@@ -35,9 +33,9 @@ class Login extends React.Component {
                             placeholder="Password"
                             className="w-3/4 p-2 my-2 bg-white text-black rounded"
                         />
-                        <button className="w-3/4 p-2 my-2 bg-blue-700 hover:bg-blue-800 text-white rounded">
+                        <Link to="/home"><button className="w-3/4 p-2 my-2 bg-blue-700 hover:bg-blue-800 text-white rounded">
                             Login
-                        </button>
+                        </button></Link>
                     </form>
                 </section>
             </main>
