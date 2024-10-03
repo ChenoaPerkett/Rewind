@@ -13,7 +13,7 @@ class Layout extends React.Component {
           <Header />
 
           
-          <div className="p-6 bg-gray-100">{this.props.children}</div>
+          <div className="p-6 bg-gray-100 ">{this.props.children}</div>
         </div>
       </div>
     );

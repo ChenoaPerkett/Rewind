@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Layout from "../components/Layout";
+import { AddIcon } from "../components/Icons";
 
 class Home extends Component {
   render() {
@@ -8,7 +9,7 @@ class Home extends Component {
         
         <div className="grid grid-cols-3 gap-4 mb-8">
           <div className="bg-gray-300 p-6 rounded-lg">
-            <h3 className="text-lg font-bold">Playlist of the Day</h3>
+            <h3 className="text-lg font-bold">Favourite song</h3>
             <p className="text-sm">Created by DHFF</p>
           </div>
           <div className="bg-gray-300 p-6 rounded-lg">
@@ -19,14 +20,16 @@ class Home extends Component {
             <h3 className="text-lg font-bold">Most Played Songs</h3>
           </div>
         </div>
-
+        <button className="flex items-center mb-2 p-2 bg-blue-950 rounded-full text-white ml-auto">Add New</button>
         <div className="bg-white rounded-lg shadow-lg p-4">
           <div className="grid grid-cols-5 gap-4 text-sm font-bold p-4 border-b">
             <span>Name of Song</span>
             <span>Artist</span>
             <span>Time</span>
             <span>Album</span>
-            <span>Added</span>
+            <span>Action</span>
+            
+
           </div>
 
           {[...Array(4)].map((_, i) => (
@@ -42,8 +45,7 @@ class Home extends Component {
               <span>3:53</span>
               <span>Album</span>
               <span className="flex items-center">
-                6
-                <input type="checkbox" className="ml-2" />
+              <button><AddIcon/></button>
               </span>
             </div>
           ))}
