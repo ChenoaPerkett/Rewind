@@ -9,6 +9,8 @@ import Login from './pages/auth/Login';
 import Settings from './pages/Settings';
 import Logout from './pages/auth/Logout';
 import Register from './pages/auth/Register';
+import Playlist from './pages/Playlist';
+
 
 class App extends Component {
   render() {
@@ -23,6 +25,8 @@ class App extends Component {
           <Route path="/profile" element={<Profile/>} />
           <Route path="/settings" element={<Settings/>} />
           <Route path="/register" element={<Register/>} />
+          <Route path="/playlist" element={<Playlist/>} />
+  
         </Routes>
       </Router>
     );

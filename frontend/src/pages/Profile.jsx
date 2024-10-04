@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Layout from "../components/Layout";
+import { Link } from 'react-router-dom';
 
 class Profile extends Component {
   render() {
     return (
         <Layout>
-      <div className=" bg-blue-900 text-white p-8 m-0">
+      <div className=" bg-blue-900 text-white p-8 m-0 ">
 
         <div className="flex space-x-8">
           <div className="bg-gray-400 rounded-full h-40 w-40"></div>
@@ -24,7 +25,6 @@ class Profile extends Component {
         </div>
         <br/>
         <hr/>
-
    
         <div className="mt-8">
           <div className="flex justify-center space-x-8">
@@ -34,16 +34,16 @@ class Profile extends Component {
           </div>
         </div>
 
-
         <div className="mt-8 grid grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
+        
+          {[...Array(6)].map((_, i) => (<Link to="/playlist">
             <div key={i} className="bg-gray-200 text-black p-4 rounded-lg">
               <div className="bg-red-400 h-40 mb-4">COVER IMAGE</div>
               <p className="font-bold">NAME OF PLAYLIST</p>
               <p># songs</p>
               <p className="text-sm text-gray-600">Created by</p>
               <p className="text-sm text-gray-600">timestamp</p>
-            </div>
+            </div>  </Link>
           ))}
         </div>
       </div>
