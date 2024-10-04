@@ -18,7 +18,7 @@ class Songs extends Component {
             <h3 className="text-lg font-bold">Most liked Songs</h3>
           </div>
         </div>
-        <button className="flex items-center mb-2 p-2 bg-blue-950 rounded-full text-white ml-auto">Add New</button>
+        <button className="flex items-center mb-2 p-2 bg-blue-950  px-4 py-2 rounded-lg text-white ml-auto">+ NEW</button>
         <div className="bg-white rounded-lg shadow-lg p-4">
           <div className="grid grid-cols-5 gap-4 text-sm font-bold p-4 border-b">
             <span>Name of Song</span>

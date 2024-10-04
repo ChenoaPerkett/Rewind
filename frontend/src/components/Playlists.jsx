@@ -18,9 +18,10 @@ class Playlists extends Component {
             <h3 className="text-lg font-bold">Most liked Playlist</h3>
           </div>
         </div>
-
+        <button className="flex items-center mb-2 p-2 bg-blue-950  px-4 py-2 rounded-lg text-white ml-auto">+ NEW</button>
 
         <div className="space-y-6">
+
 
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex justify-between items-center bg-blue-300 p-6 rounded-lg">
@@ -41,7 +42,7 @@ class Playlists extends Component {
 
               <div className="flex items-center space-x-4">
                 <p className="text-sm text-gray-600">timestamp of created</p>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">Add playlist</button>
+                <button className="bg-blue-950 text-white px-4 py-2 rounded-lg">Add playlist</button>
               </div>
             </div>
           ))}
