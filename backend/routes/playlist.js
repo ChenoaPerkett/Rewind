@@ -1,5 +1,5 @@
 const express = require('express');
-const { createPlaylist, getPlaylists } = require('../controllers/playlistController');
+const { createPlaylist, getPlaylists } = require('../controllers/playlist');
 const router = express.Router();
 const auth = require('../middleware/auth');
 

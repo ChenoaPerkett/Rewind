@@ -1,9 +1,8 @@
 const express = require('express');
-
 const connectDB = require('./config/db');
-const userRoutes = require('./routes/userRoutes');
-const songRoutes = require('./routes/songRoutes');
-const playlistRoutes = require('./routes/playlistRoutes');
+const userRoutes = require('./routes/user');
+const songRoutes = require('./routes/song');
+const playlistRoutes = require('./routes/playlist');
 
 require('dotenv').config();
 
@@ -14,9 +13,9 @@ app.use(express.static("frontend/public"));
 
 connectDB();
 
-app.use('/api/users', userRoutes);
-app.use('/api/songs', songRoutes);
-app.use('/api/playlists', playlistRoutes);
+app.use('/users', userRoutes);
+app.use('/songs', songRoutes);
+app.use('/playlists', playlistRoutes);
 
 const PORT = process.env.PORT || 3000;
 
