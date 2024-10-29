@@ -1,14 +1,13 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default {
-    entry: './frontend/src/index.js',
+    entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, 'frontend', 'public'),
+        path: path.resolve(__dirname, 'public'),
         filename: 'bundle.js',
     },
     mode: 'development',
@@ -44,14 +43,7 @@ export default {
         extensions: ['.js', '.jsx'],
     },
     devServer: {
-        static: path.join('frontend/public'),
+        static: path.join('public'),
         hot: true,
-    },
-    plugins: [
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: path.resolve(__dirname, 'backend'), to: path.resolve(__dirname, 'backend/dist') }
-            ]
-        })
-    ]
+    }
 };

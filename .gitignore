@@ -1,8 +1,9 @@
-# Files
-.env
+# Server
+server/.env
+server/dist
+server/node_modules
 
-# Directories
-node_modules
-backend/dist
-frontend/public/bundle.js
-frontend/public/output.css
+# Client
+client/node_modules
+client/public/bundle.js
+client/public/output.css
