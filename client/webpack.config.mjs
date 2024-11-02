@@ -43,7 +43,13 @@ export default {
         extensions: ['.js', '.jsx'],
     },
     devServer: {
-        static: path.join('public'),
+        historyApiFallback: true,
+        static: {
+            directory: path.join(__dirname, 'public'),
+        },
+        port: 8080,
+        open: true,
         hot: true,
+        compress: true
     }
 };

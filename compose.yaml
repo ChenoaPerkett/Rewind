@@ -1,0 +1,26 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: server
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server:/app
+    command: npm start
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: client
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./client:/app
+    depends_on:
+      - server
+    command: npm run dev
