@@ -1,7 +1,7 @@
 import React from "react";
 import Welcome from "./Welcome";
 import { Link } from "react-router-dom";
-import { signup } from "../../services/user";
+import { signup } from "../../services/auth";
 
 class Register extends React.Component {
     constructor(props) {

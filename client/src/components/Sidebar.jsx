@@ -1,15 +1,18 @@
 import React from "react";
+import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 
 import { HomeIcon, SearchIcon, LogOutIcon } from "./Icons";
 
 class Sidebar extends React.Component {
     render() {
+        const user = JSON.parse(Cookies.get("user"));
+
         return (
             <aside className=" bg-blue-950 w-1/6 p-8 flex flex-col">
                 <Link to="/profile" className="flex flex-col items-center">
-                    <div className="bg-blue-600 rounded-full h-24 w-24 mb-2"></div>
-                    <h2 className="text-xl font-bold text-white">User Name</h2>
+                    <img src={user.image} alt="profile" className="rounded-full h-24 w-24 mb-2" />
+                    <h2 className="text-xl font-bold text-white">{`${user.name} ${user.surname}`}</h2>
                 </Link>
 
                 <hr className="my-4" />

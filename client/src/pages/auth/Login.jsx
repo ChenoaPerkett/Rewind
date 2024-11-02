@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 import Welcome from "./Welcome";
 import { Link } from "react-router-dom";
-import { login } from "../../services/user";
+import { login } from "../../services/auth";
 
 class Login extends React.Component {
     constructor(props) {
