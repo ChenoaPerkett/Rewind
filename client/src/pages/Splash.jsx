@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 
-class Spalsh extends Component {
+class Splash extends Component {
   render() {
     return (
       <div className="p-4 h-screen bg-blue-900 text-white">
@@ -31,4 +31,4 @@ class Spalsh extends Component {
   }
 }
 
-export default Spalsh;
+export default Splash;

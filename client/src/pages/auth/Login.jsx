@@ -1,4 +1,6 @@
 import React from "react";
+import Cookies from 'js-cookie';
+
 import Welcome from "./Welcome";
 import { Link } from "react-router-dom";
 import { login } from "../../services/user";
@@ -28,8 +30,19 @@ class Login extends React.Component {
         try {
             const { token, user } = await login({ email, password });
 
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify(user));
+            Cookies.set('token', token, {
+                expires: 7,
+                secure: true,
+                sameSite: 'strict',
+                path: '/'
+            });
+
+            Cookies.set('user', JSON.stringify(user), {
+                expires: 7,
+                secure: true,
+                sameSite: 'strict',
+                path: '/'
+            });
 
             window.location.href = '/home';
         } catch (error) {
@@ -64,7 +77,7 @@ class Login extends React.Component {
                         </Link>
                     </p>
 
-                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    {error && <p className="text-red-500 mb-4">{error}</p>}
 
                     <form className="mt-4 flex flex-col items-center w-full" onSubmit={this.handleSubmit}>
                         <input
