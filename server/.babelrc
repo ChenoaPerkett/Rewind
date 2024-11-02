@@ -1,0 +1,13 @@
+{
+    "presets": [
+        "@babel/preset-env"
+    ],
+    "ignore": [
+        "dist",
+        "node_modules"
+    ],
+    "only": [
+        "*.js",
+        "**/*.js"
+    ]
+}

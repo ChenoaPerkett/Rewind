@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 const API_URL = 'http://localhost:3000/users';
 
 export const getUserProfile = async (token) => {
@@ -16,8 +15,8 @@ export const getUserProfile = async (token) => {
   return await response.json();
 };
 
-export const updateUser = async (token, email, userData) => {
-  const response = await fetch(`${API_URL}?email=${email}`, {
+export const updateUser = async (token, id, userData) => {
+const response = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

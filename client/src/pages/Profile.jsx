@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import React, { Component, useState } from 'react';
 
 import Layout from "../components/Layout";
-import { updateUser} from '../services/user';
+import { updateUser } from '../services/user';
 import EditProfileModal from '../components/modals/EditProfile';
 
 class Profile extends Component {
@@ -26,11 +26,12 @@ class Profile extends Component {
     this.setState({ isModalOpen: false });
   }
 
-  handleSubmit(formData) {
+  async handleSubmit(formData) {
     const token = Cookies.get("token");
-    const email = JSON.parse(Cookies.get("user")).email;
-    
-    updateUser(token, email, formData);
+    const id = JSON.parse(Cookies.get("user"))._id;
+
+    const user = await updateUser(token, id, formData);
+    Cookies.set("user", JSON.stringify(user));
     this.setState({ isModalOpen: false });
   }
 
