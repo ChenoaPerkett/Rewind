@@ -28,7 +28,7 @@ class Sidebar extends React.Component {
                         <HomeIcon />Home
                     </Link>
 
-                    <Link to="/profile/6726080c8cb1c6a3f6313a48" className="block text-lg font-semibold p-1 rounded hover:bg-blue-600">
+                    <Link to="/search" className="block text-lg font-semibold p-1 rounded hover:bg-blue-600">
                         <SearchIcon />  Search
                     </Link>
                 </nav>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import AddNewPlaylist from "./modals/AddNewPlaylist";
 import { getPlaylists, addPlaylist, deletePlaylist } from "../services/playlist";
 
@@ -97,19 +98,21 @@ class Playlists extends Component {
             playlists.map(playlist => (
               <div key={playlist._id} className="flex justify-between items-center bg-blue-300 p-6 rounded-lg">
                 <div className="flex items-center space-x-4">
-                  <div className="relative">
-                    <img src={playlist.image} alt={playlist.name} className="h-24 w-32" />
-                  </div>
+                  <Link to={`/playlist/${playlist._id}`}>
+                    <div className="relative">
+                      <img src={playlist.image} alt={playlist.name} className="h-24 w-32" />
+                    </div>
 
-                  <div>
-                    <h3 className="font-bold">{playlist.name}</h3>
-                    <p className="text-sm">Created by {`${playlist.creator.name} ${playlist.creator.surname}`}</p>
-                    <p className="text-sm">{playlist.description}</p>
-                    <p className="text-sm">{playlist.genre}</p>
-                    {playlist.hashtags.map(hashtag => (
-                      <p key={hashtag} className="text-blue-800 mt-2">{hashtag}</p>
-                    ))}
-                  </div>
+                    <div>
+                      <h3 className="font-bold">{playlist.name}</h3>
+                      <p className="text-sm">Created by {`${playlist.creator.name} ${playlist.creator.surname}`}</p>
+                      <p className="text-sm">{playlist.description}</p>
+                      <p className="text-sm">{playlist.genre}</p>
+                      {playlist.hashtags.map(hashtag => (
+                        <p key={hashtag} className="text-blue-800 mt-2">{hashtag}</p>
+                      ))}
+                    </div>
+                  </Link>
                 </div>
 
                 <div className="flex items-center space-x-4">

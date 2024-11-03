@@ -75,7 +75,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/playlist"
+            path="/playlist/:id"
             element={
               <ProtectedRoute>
                 <Playlist />

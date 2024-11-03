@@ -80,3 +80,18 @@ export async function addToPlaylist(songId, playlistId) {
 
   return response.json();
 }
+
+export async function removeFromPlaylist(songId, playlistId) {
+  const token = Cookies.get('token');
+
+  const response = await fetch(`${API_URL}/${songId}/playlist/${playlistId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if (!response.ok) throw new Error('Failed to remove song from playlist');
+
+  return response.json();
+}

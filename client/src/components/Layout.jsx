@@ -8,12 +8,8 @@ class Layout extends React.Component {
       <div className="flex h-screen">
         <Sidebar />
 
-        
         <div className="flex-grow">
-        
-
-          
-          <div className="p-6  bg-blue-200">{this.props.children}</div>
+          <div className="p-6 h-screen bg-blue-200">{this.props.children}</div>
         </div>
       </div>
     );

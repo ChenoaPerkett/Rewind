@@ -1,6 +1,34 @@
 const Playlist = require('../models/Playlist');
 const User = require('../models/User');
 
+exports.getPlaylist = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const playlist = await Playlist.findById(id).populate('songs');
+    if (!playlist) {
+      return res.status(404).json({ error: 'Playlist not found' });
+    }
+
+    res.json(playlist);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+exports.deletePlaylist = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const playlist = await Playlist.findByIdAndDelete(id);
+    if (!playlist) {
+      return res.status(404).json({ error: 'Playlist not found' });
+    }
+
+    res.json({ message: 'Playlist deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 exports.createPlaylist = async (req, res) => {
   try {
     const { name, image, description, genre, hashtags, creator } = req.body;
