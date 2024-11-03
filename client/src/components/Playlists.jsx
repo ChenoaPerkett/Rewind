@@ -98,7 +98,7 @@ class Playlists extends Component {
             playlists.map(playlist => (
               <div key={playlist._id} className="flex justify-between items-center bg-blue-300 p-6 rounded-lg">
                 <div className="flex items-center space-x-4">
-                  <Link to={`/playlist/${playlist._id}`}>
+                  <Link to={`/playlist/${playlist._id}`} >
                     <div className="relative">
                       <img src={playlist.image} alt={playlist.name} className="h-24 w-32" />
                     </div>

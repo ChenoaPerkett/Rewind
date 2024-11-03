@@ -78,6 +78,8 @@ exports.addToPlaylist = async (req, res) => {
 exports.removeFromPlaylist = async (req, res) => {
     try {
         const { pid, id } = req.params;
+
+        console.log(pid, id);
         const playlist = await Playlist.findById(pid);
         if (!playlist) {
             return res.status(404).json({ error: 'Playlist not found' });

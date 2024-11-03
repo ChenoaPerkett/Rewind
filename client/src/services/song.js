@@ -84,6 +84,8 @@ export async function addToPlaylist(songId, playlistId) {
 export async function removeFromPlaylist(songId, playlistId) {
   const token = Cookies.get('token');
 
+  console.log(songId, playlistId);
+
   const response = await fetch(`${API_URL}/${songId}/playlist/${playlistId}`, {
     method: 'DELETE',
     headers: {

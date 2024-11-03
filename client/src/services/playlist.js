@@ -19,7 +19,6 @@ export async function getPlaylists() {
 
 export async function getPlaylist(id) {
   const token = Cookies.get('token');
-  console.log(token);
 
   const response = await fetch(`${API_URL}/${id}`, {
     headers: {

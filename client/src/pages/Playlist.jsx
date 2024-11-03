@@ -1,8 +1,10 @@
+// Playlist.js
 import React, { Component } from "react";
 import Layout from "../components/Layout";
+import SongSearchModal from "../components/modals/SearchSong";
 import { addToPlaylist, removeFromPlaylist } from "../services/song";
 import { getPlaylist, deletePlaylist, getComments, addComment } from "../services/playlist";
-import { useParams } from "react-router-dom"; // Import useParams
+import { useParams } from "react-router-dom";
 
 class InnerPlaylist extends Component {
   constructor(props) {
@@ -13,13 +15,15 @@ class InnerPlaylist extends Component {
       comments: [],
       newComment: "",
       loading: true,
-      error: null
+      error: null,
+      isModalOpen: false
     };
 
-    this.handleAddSong = this.handleAddSong.bind(this);
     this.handleDeleteSong = this.handleDeleteSong.bind(this);
     this.handleDeletePlaylist = this.handleDeletePlaylist.bind(this);
-    this.handleAddComment = this.handleAddComment.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.addSongToPlaylist = this.addSongToPlaylist.bind(this);
   }
 
   async componentDidMount() {
@@ -44,12 +48,21 @@ class InnerPlaylist extends Component {
     }
   }
 
-  async handleAddSong(songData) {
+  openModal() {
+    this.setState({ isModalOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ isModalOpen: false });
+  }
+
+  async addSongToPlaylist(song) {
     try {
-      const { id } = this.state.playlist;
-      const newSong = await addToPlaylist(id, songData);
+      const { id } = this.props.params;
+      const newSong = await addToPlaylist(song, id);
       this.setState(prevState => ({
-        songs: [...prevState.songs, newSong]
+        songs: [...prevState.songs, newSong],
+        isModalOpen: false
       }));
     } catch (error) {
       this.setState({ error: "Failed to add song" });
@@ -58,7 +71,7 @@ class InnerPlaylist extends Component {
 
   async handleDeleteSong(songId) {
     try {
-      const { id } = this.state.playlist;
+      const { id } = this.props.params;
       await removeFromPlaylist(songId, id);
       this.setState(prevState => ({
         songs: prevState.songs.filter(song => song._id !== songId)
@@ -70,7 +83,7 @@ class InnerPlaylist extends Component {
 
   async handleDeletePlaylist() {
     try {
-      const { id } = this.state.playlist;
+      const { id } = this.props.params;
       await deletePlaylist(id);
       this.props.navigate("/playlists");
     } catch (error) {
@@ -78,21 +91,8 @@ class InnerPlaylist extends Component {
     }
   }
 
-  async handleAddComment() {
-    try {
-      const { id } = this.state.playlist;
-      const newComment = await addComment(id, { text: this.state.newComment });
-      this.setState(prevState => ({
-        comments: [...prevState.comments, newComment],
-        newComment: ""
-      }));
-    } catch (error) {
-      this.setState({ error: "Failed to add comment" });
-    }
-  }
-
   render() {
-    const { playlist, songs, comments, newComment, loading, error } = this.state;
+    const { playlist, songs, comments, newComment, loading, error, isModalOpen } = this.state;
 
     if (loading) return <Layout><div>Loading...</div></Layout>;
     if (error) return <Layout><div>{error}</div></Layout>;
@@ -122,7 +122,9 @@ class InnerPlaylist extends Component {
             <div className="w-2/3 bg-white p-6 rounded-lg">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-bold">{songs.length} SONGS</h3>
-                <button onClick={() => this.handleAddSong({/* song data */ })} className="bg-blue-500 text-white px-4 py-2 rounded">ADD SONG</button>
+                <button onClick={this.openModal} className="bg-blue-500 text-white px-4 py-2 rounded">
+                  ADD SONG
+                </button>
               </div>
 
               <div className="grid grid-cols-5 gap-4 text-sm font-bold border-b py-2">
@@ -173,6 +175,12 @@ class InnerPlaylist extends Component {
               </div>
             ))}
           </div>
+
+          <SongSearchModal
+            isOpen={isModalOpen}
+            onClose={this.closeModal}
+            onAddSong={this.addSongToPlaylist}
+          />
         </div>
       </Layout>
     );
