@@ -7,7 +7,6 @@ import Splash from './pages/Splash';
 import Profile from './pages/Profile';
 import Login from './pages/auth/Login';
 import Playlist from './pages/Playlist';
-import Settings from './pages/Settings';
 import Logout from './pages/auth/Logout';
 import Register from './pages/auth/Register';
 import PublicRoute from './components/PublicRoute';
@@ -63,14 +62,6 @@ class App extends Component {
             element={
               <ProtectedRoute>
                 <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <Settings />
               </ProtectedRoute>
             }
           />

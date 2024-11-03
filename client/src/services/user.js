@@ -2,6 +2,18 @@ import Cookies from 'js-cookie';
 
 const API_URL = 'http://localhost:3000/users';
 
+export const getUsers = async () => {
+  const token = Cookies.get('token');
+  const response = await fetch(API_URL, { headers: { Authorization: `Bearer ${token}` } });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to fetch users');
+  }
+
+  return await response.json();
+};
+
 export const getUserById = async (token, id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     headers: {
@@ -18,7 +30,7 @@ export const getUserById = async (token, id) => {
 }
 
 export const updateUser = async (token, id, userData) => {
-const response = await fetch(`${API_URL}/${id}`, {
+  const response = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
