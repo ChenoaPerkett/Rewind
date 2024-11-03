@@ -1,5 +1,5 @@
+import Cookies from 'js-cookie';
 import React, { Component } from 'react';
-
 
 class AddNewSong extends Component {
     constructor(props) {
@@ -7,9 +7,11 @@ class AddNewSong extends Component {
         this.state = {
             formData: {
                 name: '',
+                image: '',
                 artist: '',
-                link: '',
-                dateAdded: new Date().toISOString() 
+                album: '',
+                url: '',
+                addedBy: JSON.parse(Cookies.get('user'))._id,
             },
             error: ''
         };
@@ -34,11 +36,10 @@ class AddNewSong extends Component {
         const { name, artist, link } = this.state.formData;
 
     
-        if (!/^https:\/\/open\.spotify\.com\/track\/[A-Za-z0-9]+/.test(link)) {
-            this.setState({ error: 'Please provide a valid Spotify track link.' });
-            return;
-        }
-
+        // if (!/^https:\/\/open\.spotify\.com\/track\/[A-Za-z0-9]+/.test(link)) {
+        //     this.setState({ error: 'Please provide a valid Spotify track link.' });
+        //     return;
+        // }
   
         this.props.onSubmit({ ...this.state.formData, dateAdded: new Date().toISOString() });
     }
@@ -76,6 +77,17 @@ class AddNewSong extends Component {
                                 />
                             </div>
                             <div>
+                                <label className="block text-sm font-medium text-gray-700">Image</label>
+                                <input
+                                    type="text"
+                                    name="image"
+                                    value={formData.image}
+                                    onChange={this.handleChange}
+                                    className="w-full p-2 border rounded focus:ring-blue-500 focus:border-blue-500"
+                                    required
+                                />
+                            </div>
+                            <div>
                                 <label className="block text-sm font-medium text-gray-700">Artist</label>
                                 <input
                                     type="text"
@@ -87,11 +99,22 @@ class AddNewSong extends Component {
                                 />
                             </div>
                             <div>
+                                <label className="block text-sm font-medium text-gray-700">Album</label>
+                                <input
+                                    type="text"
+                                    name="album"
+                                    value={formData.album}
+                                    onChange={this.handleChange}
+                                    className="w-full p-2 border rounded focus:ring-blue-500 focus:border-blue-500"
+                                    required
+                                />
+                            </div>
+                            <div>
                                 <label className="block text-sm font-medium text-gray-700">Spotify Link</label>
                                 <input
                                     type="url"
-                                    name="link"
-                                    value={formData.link}
+                                    name="url"
+                                    value={formData.url}
                                     onChange={this.handleChange}
                                     className="w-full p-2 border rounded focus:ring-blue-500 focus:border-blue-500"
                                     required

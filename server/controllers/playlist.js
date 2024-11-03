@@ -3,14 +3,14 @@ const Playlist = require('../models/Playlist');
 
 exports.createPlaylist = async (req, res) => {
   try {
-    const { name, image, description, genre, hashtags } = req.body;
+    const { name, image, description, genre, hashtags, creator } = req.body;
     const playlist = new Playlist({
       name,
       image,
       genre,
       hashtags,
       description,
-      creator: req.user._id,
+      creator
     });
     await playlist.save();
     res.status(201).json(playlist);

@@ -6,12 +6,11 @@ class AddNewPlaylist extends Component {
         super(props);
         this.state = {
             formData: {
-                name: `New Playlist #${props.playlistCount + 1}`, 
+                name: 'New Playlist', 
                 genre: '',
                 description: '',
-                coverImage: null,
+                image: '',
                 hashtags: '',
-                songs: props.initialSongs || []
             },
             error: '',
             isDragOver: false
@@ -106,6 +105,17 @@ class AddNewPlaylist extends Component {
                                 </select>
                             </div>
                             <div>
+                                <label className="block text-sm font-medium text-gray-700">Cover Image</label>
+                                <input
+                                    type="text"
+                                    name="image"
+                                    value={formData.image}
+                                    onChange={this.handleChange}
+                                    className="w-full p-2 border rounded focus:ring-blue-500 focus:border-blue-500"
+                                    required
+                                />
+                            </div>
+                            <div>
                                 <label className="block text-sm font-medium text-gray-700">Description</label>
                                 <textarea
                                     name="description"
@@ -115,7 +125,7 @@ class AddNewPlaylist extends Component {
                                     className="w-full p-2 border rounded focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>
-                            <div
+                            {/* <div
                                 onDragOver={(e) => { e.preventDefault(); this.setState({ isDragOver: true }); }}
                                 onDragLeave={() => this.setState({ isDragOver: false })}
                                 onDrop={this.handleImageDrop}
@@ -126,7 +136,7 @@ class AddNewPlaylist extends Component {
                                 ) : (
                                     <p>Drag & Drop cover image here or click to upload</p>
                                 )}
-                            </div>
+                            </div> */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Hashtags</label>
                                 <input

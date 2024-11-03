@@ -1,9 +1,11 @@
 const express = require('express');
-const { addSong, getSongs } = require('../controllers/song');
+const { addSong, getSongs, updateSong, deleteSong } = require('../controllers/song');
 const router = express.Router();
 const auth = require('../middleware/auth');
 
+router.get('/', auth, getSongs);
 router.post('/', auth, addSong);
-router.get('/', getSongs);
+router.put('/:id', auth, updateSong);
+router.delete('/:id', auth, deleteSong);
 
 module.exports = router;

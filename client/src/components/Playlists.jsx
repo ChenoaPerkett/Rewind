@@ -1,14 +1,34 @@
 import React, { Component } from "react";
 import AddNewPlaylist from "./modals/AddNewPlaylist";
+import { getPlaylists, addPlaylist, deletePlaylist } from "../services/playlist";
 
 class Playlists extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalOpen: false
+      isModalOpen: false,
+      playlists: [],
+      loading: true,
+      error: null
     };
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handleAddPlaylist = this.handleAddPlaylist.bind(this);
+    this.fetchPlaylists = this.fetchPlaylists.bind(this);
+    this.handleDeletePlaylist = this.handleDeletePlaylist.bind(this);
+  }
+
+  componentDidMount() {
+    this.fetchPlaylists();
+  }
+
+  async fetchPlaylists() {
+    try {
+      const playlists = await getPlaylists();
+      this.setState({ playlists, loading: false });
+    } catch (error) {
+      this.setState({ error: "Failed to load playlists", loading: false });
+    }
   }
 
   openModal() {
@@ -19,11 +39,36 @@ class Playlists extends Component {
     this.setState({ isModalOpen: false });
   }
 
+  async handleAddPlaylist(playlistData) {
+    try {
+      const newPlaylist = await addPlaylist(playlistData);
+      this.setState(prevState => ({
+        playlists: [...prevState.playlists, newPlaylist],
+        isModalOpen: false
+      }));
+    } catch (error) {
+      this.setState({ error: "Failed to add playlist" });
+    }
+  }
+
+  async handleDeletePlaylist(playlistId) {
+    try {
+      await deletePlaylist(playlistId);
+      this.setState(prevState => ({
+        playlists: prevState.playlists.filter(playlist => playlist._id !== playlistId)
+      }));
+    } catch (error) {
+      this.setState({ error: "Failed to delete playlist" });
+    }
+  }
+
   render() {
-    const { isModalOpen } = this.state;
+    const { isModalOpen, playlists, loading, error } = this.state;
 
     return (
       <div className="min-h-screen">
+        {error && <p className="text-red-500">{error}</p>}
+
         <div className="grid grid-cols-3 gap-4 mb-8">
           <div className="bg-gray-300 p-6 rounded-lg">
             <h3 className="text-lg font-bold">Favourite Playlist</h3>
@@ -46,41 +91,48 @@ class Playlists extends Component {
         </button>
 
         <div className="space-y-6">
-          {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex justify-between items-center bg-blue-300 p-6 rounded-lg">
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <div className="bg-gray-300 h-24 w-32"></div>
+          {loading ? (
+            <p>Loading playlists...</p>
+          ) : (
+            playlists.map(playlist => (
+              <div key={playlist._id} className="flex justify-between items-center bg-blue-300 p-6 rounded-lg">
+                <div className="flex items-center space-x-4">
+                  <div className="relative">
+                    <img src={playlist.image} alt={playlist.name} className="h-24 w-32" />
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold">{playlist.name}</h3>
+                    <p className="text-sm">Created by {`${playlist.creator.name} ${playlist.creator.surname}`}</p>
+                    <p className="text-sm">{playlist.description}</p>
+                    <p className="text-sm">{playlist.genre}</p>
+                    {playlist.hashtags.map(hashtag => (
+                      <p key={hashtag} className="text-blue-800 mt-2">{hashtag}</p>
+                    ))}
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="font-bold">NAME OF PLAYLIST</h3>
-                  <p className="text-sm">Created by</p>
-                  <p className="text-sm">Description</p>
-                  <p className="text-sm">Genre</p>
-                  <p className="text-blue-800 mt-2">#hashtags</p>
+                <div className="flex items-center space-x-4">
+                  <p className="text-sm text-gray-600">{new Date(playlist.date).toLocaleDateString()}</p>
+                  <button
+                    onClick={() => this.handleDeletePlaylist(playlist._id)}
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
-
-              <div className="flex items-center space-x-4">
-                <p className="text-sm text-gray-600">timestamp of created</p>
-                <button className="bg-blue-950 text-white px-4 py-2 rounded-lg">Add playlist</button>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
-        {/* Add New Playlist Modal */}
         {isModalOpen && (
           <AddNewPlaylist
             isOpen={isModalOpen}
             onClose={this.closeModal}
-            onSubmit={(data) => {
-              console.log("Playlist data:", data);
-              this.closeModal();
-            }}
-            genres={['Pop', 'Rnb', 'Afrohits']}  // Example genres
-            playlistCount={3}  // Replace with dynamic count if needed
+            onSubmit={this.handleAddPlaylist}
+            genres={['Pop', 'Rnb', 'Afrohits']}
+            playlistCount={playlists.length}
           />
         )}
       </div>
