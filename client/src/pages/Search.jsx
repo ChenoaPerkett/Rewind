@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import { getSongs } from "../services/song";
 import { getUsers } from "../services/user";
 import { getPlaylists } from "../services/playlist";
+import { Link } from "react-router-dom";
 
 class Search extends Component {
   constructor(props) {
@@ -103,10 +104,10 @@ class Search extends Component {
       ));
     } else if (activeCategory === "USERS") {
       return filteredResults.map((user) => (
-        <div key={user._id} className="bg-blue-200 p-4 rounded-lg mb-4">
-          <p className="font-bold">{user.name}</p>
-          <p className="text-sm text-gray-600">{user.email}</p>
-        </div>
+        <Link to={`/profile/${user._id}`} key={user._id} className="bg-blue-200 p-4 rounded-lg mb-4 block">
+        <p className="font-bold">{user.name}</p>
+        <p className="text-sm text-gray-600">{user.email}</p>
+      </Link>
       ));
     }
   }
