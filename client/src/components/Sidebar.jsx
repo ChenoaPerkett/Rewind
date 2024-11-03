@@ -10,7 +10,7 @@ class Sidebar extends React.Component {
 
         return (
             <aside className=" bg-blue-950 w-1/6 p-8 flex flex-col">
-                <Link to="/profile" className="flex flex-col items-center">
+                <Link to={`/profile/${user._id}`} className="flex flex-col items-center">
                     <img src={user.image} alt="profile" className="rounded-full h-24 w-24 mb-2" />
                     <h2 className="text-xl font-bold text-white">{`${user.name} ${user.surname}`}</h2>
                 </Link>
@@ -23,7 +23,7 @@ class Sidebar extends React.Component {
                         <HomeIcon />Home
                     </Link>
 
-                    <Link to="/search" className="block text-lg font-semibold p-1 rounded hover:bg-blue-600">
+                    <Link to="/profile/6726080c8cb1c6a3f6313a48" className="block text-lg font-semibold p-1 rounded hover:bg-blue-600">
                         <SearchIcon />  Search
                     </Link>
                 </nav>

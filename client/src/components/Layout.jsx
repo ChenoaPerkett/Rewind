@@ -10,7 +10,7 @@ class Layout extends React.Component {
 
         
         <div className="flex-grow">
-          <Header />
+        
 
           
           <div className="p-6  bg-blue-200">{this.props.children}</div>

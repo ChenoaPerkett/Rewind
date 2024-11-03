@@ -15,9 +15,11 @@ class Header extends React.Component {
                 </div>
 
                 <div className="flex space-x-4">
+                    
                     <button className="p-2 text-gray-700 rounded-full hover:text-white min-w-24 hover:bg-blue-400">Playlists</button>
                     <button className="p-2 bg-blue-950 rounded-full text-white min-w-24">Songs</button>
                 </div>
+                <div className="flex space-x-4"></div>
 
                 <Link to="/settings" className="flex text-lg font-semibold p-1">
                     <SettingsIcon />

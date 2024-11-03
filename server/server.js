@@ -4,6 +4,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const songRoutes = require('./routes/song');
+const friendRoutes = require('./routes/friend');
 const playlistRoutes = require('./routes/playlist');
 
 require('dotenv').config();
@@ -18,6 +19,7 @@ connectDB();
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/songs', songRoutes);
+app.use('/friends', friendRoutes);
 app.use('/playlists', playlistRoutes);
 
 const PORT = 3000;
