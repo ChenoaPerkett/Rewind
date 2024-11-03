@@ -70,20 +70,6 @@ class Playlists extends Component {
       <div className="min-h-screen">
         {error && <p className="text-red-500">{error}</p>}
 
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-gray-300 p-6 rounded-lg">
-            <h3 className="text-lg font-bold">Favourite Playlist</h3>
-            <p className="text-sm">Created by DHFF</p>
-          </div>
-          <div className="bg-gray-300 p-6 rounded-lg">
-            <h3 className="text-lg font-bold">Playlist of the Day</h3>
-            <p className="text-sm">Created by DHFF</p>
-          </div>
-          <div className="bg-gray-300 p-6 rounded-lg">
-            <h3 className="text-lg font-bold">Most liked Playlist</h3>
-          </div>
-        </div>
-
         <button
           onClick={this.openModal}
           className="flex items-center mb-2 p-2 bg-blue-950 px-4 py-2 rounded-lg text-white ml-auto"

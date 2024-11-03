@@ -1,10 +1,10 @@
-// Playlist.js
 import React, { Component } from "react";
 import Layout from "../components/Layout";
 import SongSearchModal from "../components/modals/SearchSong";
 import { addToPlaylist, removeFromPlaylist } from "../services/song";
 import { getPlaylist, deletePlaylist, getComments, addComment } from "../services/playlist";
 import { useParams } from "react-router-dom";
+import Cookies from "js-cookie";
 
 class InnerPlaylist extends Component {
   constructor(props) {
@@ -16,7 +16,8 @@ class InnerPlaylist extends Component {
       newComment: "",
       loading: true,
       error: null,
-      isModalOpen: false
+      isModalOpen: false,
+      isOwner: false
     };
 
     this.handleDeleteSong = this.handleDeleteSong.bind(this);
@@ -34,14 +35,17 @@ class InnerPlaylist extends Component {
     try {
       const { id } = this.props.params;
       const playlistData = await getPlaylist(id);
-      //const commentsData = await getComments(id);
-      const commentsData = [];
+
+      const loggedInUserId = JSON.parse(Cookies.get("user"))._id;
+
+      const isOwner = loggedInUserId === playlistData.creator;
 
       this.setState({
         playlist: playlistData,
         songs: playlistData.songs,
-        comments: commentsData,
-        loading: false
+        comments: [],
+        loading: false,
+        isOwner
       });
     } catch (error) {
       this.setState({ error: "Failed to load playlist data", loading: false });
@@ -92,7 +96,7 @@ class InnerPlaylist extends Component {
   }
 
   render() {
-    const { playlist, songs, comments, newComment, loading, error, isModalOpen } = this.state;
+    const { playlist, songs, comments, newComment, loading, error, isModalOpen, isOwner } = this.state;
 
     if (loading) return <Layout><div>Loading...</div></Layout>;
     if (error) return <Layout><div>{error}</div></Layout>;
@@ -110,9 +114,13 @@ class InnerPlaylist extends Component {
               <p className="mb-1">{playlist.description}</p>
               <p className="mb-1">{playlist.genre}</p>
 
-              <div className="flex space-x-2 mt-4">
-                <button onClick={this.handleDeletePlaylist} className="bg-red-500 text-white px-4 py-2 rounded">DELETE</button>
-              </div>
+              {isOwner && (
+                <div className="flex space-x-2 mt-4">
+                  <button onClick={this.handleDeletePlaylist} className="bg-red-500 text-white px-4 py-2 rounded">
+                    DELETE
+                  </button>
+                </div>
+              )}
 
               {playlist.hashtags.map(tag => (
                 <p key={tag} className="mt-2 text-blue-800">{tag}</p>
@@ -122,29 +130,36 @@ class InnerPlaylist extends Component {
             <div className="w-2/3 bg-white p-6 rounded-lg">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-bold">{songs.length} SONGS</h3>
-                <button onClick={this.openModal} className="bg-blue-500 text-white px-4 py-2 rounded">
-                  ADD SONG
-                </button>
+
+                {isOwner && (
+                  <button onClick={this.openModal} className="bg-blue-500 text-white px-4 py-2 rounded">
+                    ADD SONG
+                  </button>
+                )}
               </div>
 
               <div className="grid grid-cols-5 gap-4 text-sm font-bold border-b py-2">
-                <span>#</span>
+                <span className="w-4">#</span>
                 <span>SONG NAME</span>
                 <span>ALBUM</span>
                 <span>DATE</span>
                 <span>ACTION</span>
               </div>
-
               {songs.map((song, index) => (
                 <div key={song._id} className="grid grid-cols-5 gap-4 items-center border-b py-2">
-                  <span>{index + 1}</span>
+                  <span className="w-4">{index + 1}</span>
                   <div className="flex items-center space-x-2">
                     <img src={song.image} alt="Song cover" className="bg-gray-300 h-8 w-8 rounded" />
                     <span>{song.name}</span>
                   </div>
                   <span>{song.album}</span>
                   <span>{new Date(song.date).toLocaleDateString()}</span>
-                  <button onClick={() => this.handleDeleteSong(song._id)} className="bg-red-500 text-white px-4 py-1 rounded">DELETE</button>
+
+                  {isOwner && (
+                    <button onClick={() => this.handleDeleteSong(song._id)} className="bg-red-500 text-white px-4 py-1 rounded">
+                      DELETE
+                    </button>
+                  )}
                 </div>
               ))}
             </div>

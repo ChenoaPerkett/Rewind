@@ -231,25 +231,25 @@ class InnerProfile extends Component {
                 {activeTab === 'POSTS' && (
                   <div className="grid grid-cols-3 gap-6">
                     {posts.map(post => (
-                      <div key={post._id} className="bg-gray-200 text-black p-4 rounded-lg">
-                        <div className="bg-red-400 h-40 mb-4">POST IMAGE</div>
-                        <p className="font-bold">{post.title}</p>
-                        <p className="text-sm text-gray-600">Posted by {post.author}</p>
-                        <p className="text-sm text-gray-600">{post.timestamp}</p>
-                      </div>
+                      <Link to={`/playlist/${post._id}`} key={post._id} className="bg-gray-200 text-black p-4 rounded-lg">
+                        <img src={post.image} alt="Post cover" className="bg-gray-300 h-40 w-full object-cover mb-4 rounded" />
+                        <p className="font-bold">{post.name}</p>
+                        <p className="text-sm text-gray-600">Posted by {post.creator.name}</p>
+                        <p className="text-sm text-gray-600">{new Date(post.date).toLocaleDateString()}</p>
+                      </Link>
                     ))}
                   </div>
                 )}
                 {activeTab === 'SAVED' && (
                   <div className="grid grid-cols-3 gap-6">
                     {savedPlaylists.map(playlist => (
-                      <div key={playlist._id} className="bg-gray-200 text-black p-4 rounded-lg">
+                      <Link to={`/playlist/${playlist._id}`} key={playlist._id} className="bg-gray-200 text-black p-4 rounded-lg">
                         <div className="bg-red-400 h-40 mb-4">COVER IMAGE</div>
                         <p className="font-bold">{playlist.name}</p>
                         <p># songs: {playlist.songCount}</p>
                         <p className="text-sm text-gray-600">Created by {playlist.creator}</p>
                         <p className="text-sm text-gray-600">{playlist.timestamp}</p>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 )}
