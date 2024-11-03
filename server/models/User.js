@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     songs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Song' }],
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    saved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Playlist' }],
     playlists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Playlist' }],
 });
 

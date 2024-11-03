@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import Layout from "../components/Layout";
 import EditProfileModal from '../components/modals/EditProfile';
-import { updateUser, getUserById, deleteUser } from '../services/user';
+import { updateUser, getUserById, deleteUser, getUserPosts, getUserSavedPlaylists } from '../services/user';
 import { getFriends, followUser, unfollowUser, getFollowStatus } from '../services/friend';
 
 class InnerProfile extends Component {
@@ -16,6 +16,8 @@ class InnerProfile extends Component {
       isLoading: true,
       error: null,
       friends: [],
+      posts: [],
+      savedPlaylists: [],
       isFollowing: false,
       activeTab: 'POSTS',
       isFriend: false
@@ -26,10 +28,25 @@ class InnerProfile extends Component {
     this.handleFollow = this.handleFollow.bind(this);
     this.handleModalOpen = this.handleModalOpen.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
+    this.fetchProfileData = this.fetchProfileData.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.fetchProfileData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.params.id !== this.props.params.id) {
+      this.fetchProfileData();
+    }
+    if (prevState.activeTab !== this.state.activeTab) {
+      this.fetchTabData();
+    }
+  }
+
+  async fetchProfileData() {
     try {
+      this.setState({ isLoading: true, error: null });
       const profileId = this.props.params?.id || JSON.parse(Cookies.get("user"))._id;
       const token = Cookies.get("token");
       const follower = JSON.parse(Cookies.get("user"))._id;
@@ -49,8 +66,30 @@ class InnerProfile extends Component {
         isFriend,
         isLoading: false
       });
+
+      this.fetchTabData();
     } catch (error) {
       this.setState({ error: "Failed to load profile", isLoading: false });
+      console.error(error);
+    }
+  }
+
+  async fetchTabData() {
+    const { activeTab } = this.state;
+
+    const token = Cookies.get("token");
+    const id = JSON.parse(Cookies.get('user'))._id;
+
+    try {
+      if (activeTab === 'POSTS') {
+        const posts = await getUserPosts(token, id);
+        this.setState({ posts });
+      } else if (activeTab === 'SAVED') {
+        const savedPlaylists = await getUserSavedPlaylists(token, id);
+        this.setState({ savedPlaylists });
+      }
+    } catch (error) {
+      this.setState({ error: `Failed to load ${activeTab.toLowerCase()}` });
       console.error(error);
     }
   }
@@ -61,8 +100,9 @@ class InnerProfile extends Component {
   }
 
   handleModalOpen() {
-    if (!this.isProfileOwner()) return;
-    this.setState({ isModalOpen: true });
+    if (this.isProfileOwner()) {
+      this.setState({ isModalOpen: true });
+    }
   }
 
   handleModalClose() {
@@ -75,13 +115,10 @@ class InnerProfile extends Component {
     try {
       const token = Cookies.get("token");
       const id = this.state.profileUser._id;
-      const updatedUser = await updateUser(token, id, formData);
+      await updateUser(token, id, formData);
 
-      if (this.isProfileOwner()) {
-        Cookies.set("user", JSON.stringify(updatedUser));
-      }
-
-      this.setState({ profileUser: updatedUser, isModalOpen: false });
+      this.setState({ isModalOpen: false });
+      this.fetchProfileData();
     } catch (error) {
       this.setState({ error: "Failed to update profile" });
     }
@@ -113,7 +150,7 @@ class InnerProfile extends Component {
         await followUser(token, follower, followee);
       }
 
-      this.setState(prev => ({ isFollowing: !prev.isFollowing }));
+      this.fetchProfileData();
     } catch (error) {
       this.setState({ error: "Failed to update follow status" });
     }
@@ -124,7 +161,7 @@ class InnerProfile extends Component {
     if (this.state.error) return <Layout><div>{this.state.error}</div></Layout>;
     if (!this.state.profileUser) return <Layout><div>Profile not found</div></Layout>;
 
-    const { profileUser, isFollowing, friends, activeTab, isFriend } = this.state;
+    const { profileUser, isFollowing, friends, posts, savedPlaylists, activeTab, isFriend } = this.state;
     const isOwner = this.isProfileOwner();
 
     return (
@@ -191,7 +228,32 @@ class InnerProfile extends Component {
               </div>
 
               <div className="mt-8">
-                {activeTab === 'FRIENDS' ? (
+                {activeTab === 'POSTS' && (
+                  <div className="grid grid-cols-3 gap-6">
+                    {posts.map(post => (
+                      <div key={post._id} className="bg-gray-200 text-black p-4 rounded-lg">
+                        <div className="bg-red-400 h-40 mb-4">POST IMAGE</div>
+                        <p className="font-bold">{post.title}</p>
+                        <p className="text-sm text-gray-600">Posted by {post.author}</p>
+                        <p className="text-sm text-gray-600">{post.timestamp}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {activeTab === 'SAVED' && (
+                  <div className="grid grid-cols-3 gap-6">
+                    {savedPlaylists.map(playlist => (
+                      <div key={playlist._id} className="bg-gray-200 text-black p-4 rounded-lg">
+                        <div className="bg-red-400 h-40 mb-4">COVER IMAGE</div>
+                        <p className="font-bold">{playlist.name}</p>
+                        <p># songs: {playlist.songCount}</p>
+                        <p className="text-sm text-gray-600">Created by {playlist.creator}</p>
+                        <p className="text-sm text-gray-600">{playlist.timestamp}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {activeTab === 'FRIENDS' && (
                   <div className="grid grid-cols-3 gap-6">
                     {friends.map(friend => (
                       <Link to={`/profile/${friend._id}`} key={friend._id}>
@@ -203,20 +265,6 @@ class InnerProfile extends Component {
                           />
                           <p className="font-bold">{`${friend.name} ${friend.surname}`}</p>
                           {friend.bio && <p className="text-sm text-gray-600">{friend.bio}</p>}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-3 gap-6">
-                    {[...Array(6)].map((_, i) => (
-                      <Link to="/playlist" key={i}>
-                        <div className="bg-gray-200 text-black p-4 rounded-lg">
-                          <div className="bg-red-400 h-40 mb-4">COVER IMAGE</div>
-                          <p className="font-bold">NAME OF PLAYLIST</p>
-                          <p># songs</p>
-                          <p className="text-sm text-gray-600">Created by</p>
-                          <p className="text-sm text-gray-600">timestamp</p>
                         </div>
                       </Link>
                     ))}

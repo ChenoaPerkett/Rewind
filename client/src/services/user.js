@@ -33,6 +33,27 @@ const response = await fetch(`${API_URL}/${id}`, {
   return await response.json();
 }
 
+export async function getUserPosts(token, id) {
+  const response = await fetch(`${API_URL}/${id}/playlist`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return response.json();
+}
+
+export async function getUserSavedPlaylists(token, id) {
+  const response = await fetch(`${API_URL}/${id}/saved`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return response.json();
+}
+
+
 export const deleteUser = async (token, id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: 'DELETE',
