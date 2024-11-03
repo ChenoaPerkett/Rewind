@@ -10,6 +10,11 @@ class Sidebar extends React.Component {
 
         return (
             <aside className=" bg-blue-950 w-1/6 p-8 flex flex-col">
+                <div className="flex items-center mb-4">
+                    <img src="/assets/images/logo.png" alt="rewind logo" className="h-10 w-10 mr-2" />
+                    <h1 className="text-3xl font-bold text-white">Rewind</h1>
+                </div>
+
                 <Link to={`/profile/${user._id}`} className="flex flex-col items-center">
                     <img src={user.image} alt="profile" className="rounded-full h-24 w-24 mb-2" />
                     <h2 className="text-xl font-bold text-white">{`${user.name} ${user.surname}`}</h2>

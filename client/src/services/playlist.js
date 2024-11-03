@@ -4,8 +4,9 @@ const API_URL = 'http://localhost:3000/playlists';
 
 export async function getPlaylists() {
   const token = Cookies.get('token');
+  const id = JSON.parse(Cookies.get('user'))._id;
 
-  const response = await fetch(`${API_URL}`, {
+  const response = await fetch(`${API_URL}/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }

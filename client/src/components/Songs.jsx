@@ -95,8 +95,8 @@ class Songs extends Component {
             <p>Loading songs...</p>
           ) : (
             songs.map(song => (
-              <a href={song.url} target="_blank" rel="noreferrer">
-                <div key={song._id} className="grid grid-cols-5 gap-4 p-4 border-b">
+              <div key={song._id} className="grid grid-cols-5 gap-4 p-4 border-b">
+                <a href={song.url} target="_blank" rel="noreferrer">
                   <div className="flex items-center">
                     <img src={song.image} alt={song.name} className="h-10 w-10 mr-4" />
                     <div>
@@ -104,16 +104,17 @@ class Songs extends Component {
                       <p className="text-sm">by {song.artist}</p>
                     </div>
                   </div>
-                  <span>{song.artist}</span>
-                  <span>{new Date(song.date).toLocaleDateString()}</span>
-                  <span>{song.album}</span>
-                  <span className="flex items-center">
-                    <button onClick={() => this.handleDeleteSong(song._id)}>
-                      <AddIcon />
-                    </button>
-                  </span>
-                </div>
-              </a>
+                </a>
+
+                <span>{song.artist}</span>
+                <span>{new Date(song.date).toLocaleDateString()}</span>
+                <span>{song.album}</span>
+                <span className="flex items-center">
+                  <button onClick={() => this.handleDeleteSong(song._id)}>
+                    <AddIcon />
+                  </button>
+                </span>
+              </div>
             ))
           )}
         </div>
