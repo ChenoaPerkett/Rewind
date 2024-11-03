@@ -1,23 +1,29 @@
+import Cookies from "js-cookie";
 import React, { Component } from "react";
-
-import { AddIcon } from "./Icons";
+import { AddIcon, DeleteIcon } from "./Icons";
 import AddNewSong from "./modals/AddNewSong";
-import { getSongs, addSong } from "../services/song";
+import AddToPlaylistModal from "./modals/AddToPlaylist";
+import { getSongs, addSong, deleteSong } from "../services/song";
 
 class Songs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalOpen: false,
+      isAddSongModalOpen: false,
+      isAddToPlaylistModalOpen: false,
+      selectedSongId: null,
       songs: [],
       loading: true,
       error: null
     };
 
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
+    this.openAddSongModal = this.openAddSongModal.bind(this);
+    this.closeAddSongModal = this.closeAddSongModal.bind(this);
+    this.openAddToPlaylistModal = this.openAddToPlaylistModal.bind(this);
+    this.closeAddToPlaylistModal = this.closeAddToPlaylistModal.bind(this);
     this.fetchSongs = this.fetchSongs.bind(this);
     this.handleAddSong = this.handleAddSong.bind(this);
+    this.handleDeleteSong = this.handleDeleteSong.bind(this); // New method for deletion
   }
 
   componentDidMount() {
@@ -27,19 +33,26 @@ class Songs extends Component {
   async fetchSongs() {
     try {
       const songs = await getSongs();
-
       this.setState({ songs, loading: false });
     } catch (error) {
       this.setState({ error: "Failed to load songs", loading: false });
     }
   }
 
-  openModal() {
-    this.setState({ isModalOpen: true });
+  openAddSongModal() {
+    this.setState({ isAddSongModalOpen: true });
   }
 
-  closeModal() {
-    this.setState({ isModalOpen: false });
+  closeAddSongModal() {
+    this.setState({ isAddSongModalOpen: false });
+  }
+
+  openAddToPlaylistModal(songId) {
+    this.setState({ isAddToPlaylistModalOpen: true, selectedSongId: songId });
+  }
+
+  closeAddToPlaylistModal() {
+    this.setState({ isAddToPlaylistModalOpen: false, selectedSongId: null });
   }
 
   async handleAddSong(songData) {
@@ -47,15 +60,26 @@ class Songs extends Component {
       const newSong = await addSong(songData);
       this.setState(prevState => ({
         songs: [...prevState.songs, newSong],
-        isModalOpen: false
+        isAddSongModalOpen: false
       }));
     } catch (error) {
       this.setState({ error: "Failed to add song" });
     }
   }
 
+  async handleDeleteSong(songId) {
+    try {
+      await deleteSong(songId);
+      this.setState(prevState => ({
+        songs: prevState.songs.filter(song => song._id !== songId)
+      }));
+    } catch (error) {
+      this.setState({ error: "Failed to delete song" });
+    }
+  }
+
   render() {
-    const { isModalOpen, songs, loading, error } = this.state;
+    const { isAddSongModalOpen, isAddToPlaylistModalOpen, selectedSongId, songs, loading, error } = this.state;
 
     return (
       <div>
@@ -63,7 +87,7 @@ class Songs extends Component {
 
         <div className="grid grid-cols-3 gap-4 mb-8">
           <div className="bg-gray-300 p-6 rounded-lg">
-            <h3 className="text-lg font-bold">Favourite song</h3>
+            <h3 className="text-lg font-bold">Favourite Song</h3>
             <p className="text-sm">Created by DHFF</p>
           </div>
           <div className="bg-gray-300 p-6 rounded-lg">
@@ -71,12 +95,12 @@ class Songs extends Component {
             <p className="text-sm">Created by DHFF</p>
           </div>
           <div className="bg-gray-300 p-6 rounded-lg">
-            <h3 className="text-lg font-bold">Most liked Songs</h3>
+            <h3 className="text-lg font-bold">Most liked Song</h3>
           </div>
         </div>
 
         <button
-          onClick={this.openModal}
+          onClick={this.openAddSongModal}
           className="flex items-center mb-2 p-2 bg-blue-950 px-4 py-2 rounded-lg text-white ml-auto"
         >
           + NEW
@@ -109,21 +133,35 @@ class Songs extends Component {
                 <span>{song.artist}</span>
                 <span>{new Date(song.date).toLocaleDateString()}</span>
                 <span>{song.album}</span>
-                <span className="flex items-center">
-                  <button onClick={() => this.handleDeleteSong(song._id)}>
+                <span className="flex items-center space-x-2">
+                  <button onClick={() => this.openAddToPlaylistModal(song._id)}>
                     <AddIcon />
                   </button>
+                  {song.addedBy === JSON.parse(Cookies.get("user"))._id && (
+                    <button onClick={() => this.handleDeleteSong(song._id)}>
+                      <DeleteIcon />
+                    </button>
+                  )}
                 </span>
               </div>
             ))
           )}
         </div>
 
-        {isModalOpen && (
+        {isAddSongModalOpen && (
           <AddNewSong
-            isOpen={isModalOpen}
-            onClose={this.closeModal}
+            isOpen={isAddSongModalOpen}
+            onClose={this.closeAddSongModal}
             onSubmit={this.handleAddSong}
+          />
+        )}
+
+        {isAddToPlaylistModalOpen && (
+          <AddToPlaylistModal
+            isOpen={isAddToPlaylistModalOpen}
+            onClose={this.closeAddToPlaylistModal}
+            songId={selectedSongId}
+            onSuccess={this.fetchSongs}
           />
         )}
       </div>

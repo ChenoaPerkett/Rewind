@@ -29,11 +29,10 @@ exports.addSong = async (req, res) => {
 
 exports.deleteSong = async (req, res) => {
     try {
-        const song = await Song.findById(req.params.id);
+        const song = await Song.findByIdAndDelete(req.params.id);
         if (!song) {
             return res.status(404).json({ error: 'Song not found' });
         }
-        await song.remove();
         res.json({ message: 'Song deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -54,22 +53,21 @@ exports.updateSong = async (req, res) => {
     }
 };
 
-exports.addSongToPlaylist = async (req, res) => {
+exports.addToPlaylist = async (req, res) => {
     try {
-        const { playlistId } = req.params;
-        const { songId } = req.body;
-        const playlist = await Playlist.findById(playlistId);
+        const { id, pid } = req.params;
+        const playlist = await Playlist.findById(pid);
         if (!playlist) {
             return res.status(404).json({ error: 'Playlist not found' });
         }
-        const song = await Song.findById(songId);
+        const song = await Song.findById(id);
         if (!song) {
             return res.status(404).json({ error: 'Song not found' });
         }
-        if (playlist.songs.includes(songId)) {
+        if (playlist.songs.includes(id)) {
             return res.status(400).json({ error: 'Song already exists in playlist' });
         }
-        playlist.songs.push(songId);
+        playlist.songs.push(id);
         await playlist.save();
         res.json(playlist);
     } catch (error) {
@@ -77,17 +75,17 @@ exports.addSongToPlaylist = async (req, res) => {
     }
 };
 
-exports.removeSongFromPlaylist = async (req, res) => {
+exports.removeFromPlaylist = async (req, res) => {
     try {
-        const { playlistId, songId } = req.params;
-        const playlist = await Playlist.findById(playlistId);
+        const { pid, id } = req.params;
+        const playlist = await Playlist.findById(pid);
         if (!playlist) {
             return res.status(404).json({ error: 'Playlist not found' });
         }
-        if (!playlist.songs.includes(songId)) {
+        if (!playlist.songs.includes(id)) {
             return res.status(400).json({ error: 'Song does not exist in playlist' });
         }
-        playlist.songs = playlist.songs.filter(song => song.toString() !== songId);
+        playlist.songs = playlist.songs.filter(song => song.toString() !== id);
         await playlist.save();
         res.json(playlist);
     } catch (error) {

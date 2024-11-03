@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 const API_URL = 'http://localhost:3000/users';
 
 export const getUserById = async (token, id) => {

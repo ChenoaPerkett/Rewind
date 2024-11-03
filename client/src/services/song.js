@@ -65,3 +65,18 @@ export async function updateSong(id, updatedData) {
 
   return response.json();
 }
+
+export async function addToPlaylist(songId, playlistId) {
+  const token = Cookies.get('token');
+
+  const response = await fetch(`${API_URL}/${songId}/playlist/${playlistId}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if (!response.ok) throw new Error('Failed to add song to playlist');
+
+  return response.json();
+}
